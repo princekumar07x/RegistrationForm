@@ -1,0 +1,481 @@
+<%@ Page Language="C#" AutoEventWireup="true"
+    CodeBehind="RegistrationForm.aspx.cs"
+    Inherits="OnlineEventRegistrationForm.RegistrationForm" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Online Event Registration</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background-color: #eef3f8;
+        }
+
+        .form-container {
+            width: 700px;
+            margin: 30px auto;
+            background-color: white;
+            padding: 25px 35px;
+            border-radius: 8px;
+            box-shadow: 0 0 8px #bbb;
+        }
+
+        .title {
+            text-align: center;
+            font-size: 25px;
+            font-weight: bold;
+            color: #1f4e79;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #ccc;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        td {
+            padding: 8px;
+            vertical-align: top;
+        }
+
+        .label {
+            width: 160px;
+            font-weight: bold;
+        }
+
+        .input {
+            width: 280px;
+            padding: 6px;
+            border: 1px solid #aaa;
+            border-radius: 3px;
+        }
+
+        .error {
+            color: red;
+            font-size: 12px;
+        }
+
+        .button {
+            background-color: #1f4e79;
+            color: white;
+            border: none;
+            padding: 9px 25px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .result {
+            margin-top: 25px;
+            padding: 15px;
+            border: 1px solid #aaa;
+            background-color: #f7f7f7;
+        }
+
+        .result-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1f4e79;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 8px;
+            margin-bottom: 10px;
+        }
+
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<form id="form1" runat="server">
+
+<div class="form-container">
+
+    <div class="title">
+        ONLINE EVENT REGISTRATION
+    </div>
+
+    <table>
+
+        <!-- Full Name -->
+        <tr>
+            <td class="label">Full Name</td>
+            <td>
+                <asp:TextBox ID="txtName"
+                    runat="server"
+                    CssClass="input">
+                </asp:TextBox>
+
+                <br />
+
+                <asp:RequiredFieldValidator
+                    ID="rfvName"
+                    runat="server"
+                    ControlToValidate="txtName"
+                    ErrorMessage="Name is required"
+                    CssClass="error"
+                    Display="Dynamic">
+                </asp:RequiredFieldValidator>
+            </td>
+        </tr>
+
+        <!-- Email -->
+        <tr>
+            <td class="label">Email ID</td>
+            <td>
+                <asp:TextBox ID="txtEmail"
+                    runat="server"
+                    CssClass="input">
+                </asp:TextBox>
+
+                <br />
+
+                <asp:RequiredFieldValidator
+                    ID="rfvEmail"
+                    runat="server"
+                    ControlToValidate="txtEmail"
+                    ErrorMessage="Email is required"
+                    CssClass="error"
+                    Display="Dynamic">
+                </asp:RequiredFieldValidator>
+
+                <asp:RegularExpressionValidator
+                    ID="revEmail"
+                    runat="server"
+                    ControlToValidate="txtEmail"
+                    ValidationExpression="^[^@\s]+@[^@\s]+\.[^@\s]+$"
+                    ErrorMessage="Enter a valid email"
+                    CssClass="error"
+                    Display="Dynamic">
+                </asp:RegularExpressionValidator>
+            </td>
+        </tr>
+
+        <!-- Contact -->
+        <tr>
+            <td class="label">Contact No</td>
+            <td>
+                <asp:TextBox ID="txtContact"
+                    runat="server"
+                    CssClass="input">
+                </asp:TextBox>
+
+                <br />
+
+                <asp:RequiredFieldValidator
+                    ID="rfvContact"
+                    runat="server"
+                    ControlToValidate="txtContact"
+                    ErrorMessage="Contact number is required"
+                    CssClass="error"
+                    Display="Dynamic">
+                </asp:RequiredFieldValidator>
+
+                <asp:RegularExpressionValidator
+                    ID="revContact"
+                    runat="server"
+                    ControlToValidate="txtContact"
+                    ValidationExpression="^[0-9]{10}$"
+                    ErrorMessage="Enter a valid 10 digit number"
+                    CssClass="error"
+                    Display="Dynamic">
+                </asp:RegularExpressionValidator>
+            </td>
+        </tr>
+
+        <!-- Department -->
+        <tr>
+            <td class="label">Department</td>
+            <td>
+                <asp:RadioButtonList
+                    ID="rblDepartment"
+                    runat="server"
+                    RepeatDirection="Horizontal">
+
+                    <asp:ListItem>Computer</asp:ListItem>
+                    <asp:ListItem>Mechanical</asp:ListItem>
+                    <asp:ListItem>Chemical</asp:ListItem>
+                    <asp:ListItem>Civil</asp:ListItem>
+
+                </asp:RadioButtonList>
+            </td>
+        </tr>
+
+        <!-- Event -->
+        <tr>
+            <td class="label">Event</td>
+            <td>
+                <asp:DropDownList
+                    ID="ddlEvent"
+                    runat="server">
+
+                    <asp:ListItem Text="Select Event" Value="">
+                    </asp:ListItem>
+
+                    <asp:ListItem>Technical Fest</asp:ListItem>
+                    <asp:ListItem>Hackathon</asp:ListItem>
+                    <asp:ListItem>Coding Competition</asp:ListItem>
+                    <asp:ListItem>Workshop</asp:ListItem>
+                    <asp:ListItem>Cultural Fest</asp:ListItem>
+
+                </asp:DropDownList>
+
+                <br />
+
+                <asp:RequiredFieldValidator
+                    ID="rfvEvent"
+                    runat="server"
+                    ControlToValidate="ddlEvent"
+                    InitialValue=""
+                    ErrorMessage="Please select event"
+                    CssClass="error"
+                    Display="Dynamic">
+                </asp:RequiredFieldValidator>
+            </td>
+        </tr>
+
+        <!-- Gender -->
+        <tr>
+            <td class="label">Gender</td>
+            <td>
+                <asp:RadioButtonList
+                    ID="rblGender"
+                    runat="server"
+                    RepeatDirection="Horizontal">
+
+                    <asp:ListItem>Male</asp:ListItem>
+                    <asp:ListItem>Female</asp:ListItem>
+
+                </asp:RadioButtonList>
+            </td>
+        </tr>
+
+        <!-- Skills -->
+        <tr>
+            <td class="label">Skills</td>
+            <td>
+                <asp:CheckBoxList
+                    ID="cblSkills"
+                    runat="server"
+                    RepeatDirection="Horizontal">
+
+                    <asp:ListItem>C#</asp:ListItem>
+                    <asp:ListItem>Python</asp:ListItem>
+                    <asp:ListItem>AI</asp:ListItem>
+
+                </asp:CheckBoxList>
+
+                <asp:CustomValidator
+                    ID="cvSkills"
+                    runat="server"
+                    ErrorMessage="Select at least one skill"
+                    CssClass="error"
+                    Display="Dynamic"
+                    OnServerValidate="cvSkills_ServerValidate">
+                </asp:CustomValidator>
+            </td>
+        </tr>
+
+        <!-- Address -->
+        <tr>
+            <td class="label">Address</td>
+            <td>
+                <asp:TextBox
+                    ID="txtAddress"
+                    runat="server"
+                    TextMode="MultiLine"
+                    Rows="4"
+                    CssClass="input">
+                </asp:TextBox>
+
+                <br />
+
+                <asp:RequiredFieldValidator
+                    ID="rfvAddress"
+                    runat="server"
+                    ControlToValidate="txtAddress"
+                    ErrorMessage="Address is required"
+                    CssClass="error"
+                    Display="Dynamic">
+                </asp:RequiredFieldValidator>
+            </td>
+        </tr>
+
+        <!-- Terms -->
+        <tr>
+            <td></td>
+            <td>
+                <asp:CheckBox
+                    ID="chkTerms"
+                    runat="server"
+                    Text="I accept Terms and Conditions" />
+
+                <br />
+
+                <asp:CustomValidator
+                    ID="cvTerms"
+                    runat="server"
+                    ErrorMessage="Please accept Terms and Conditions"
+                    CssClass="error"
+                    Display="Dynamic"
+                    OnServerValidate="cvTerms_ServerValidate">
+                </asp:CustomValidator>
+            </td>
+        </tr>
+
+        <!-- Button -->
+        <tr>
+            <td></td>
+            <td>
+                <asp:Button
+                    ID="btnSubmit"
+                    runat="server"
+                    Text="Register"
+                    CssClass="button"
+                    OnClick="btnSubmit_Click" />
+            </td>
+        </tr>
+
+    </table>
+
+
+    <!-- OUTPUT -->
+    <asp:Panel ID="pnlResult"
+        runat="server"
+        CssClass="result"
+        Visible="false">
+
+        <div class="result-title">
+            Registration Details
+        </div>
+
+        <asp:Label ID="lblMessage"
+            runat="server"
+            CssClass="success">
+        </asp:Label>
+
+        <br /><br />
+
+        <asp:Label ID="lblOutput"
+            runat="server">
+        </asp:Label>
+
+    </asp:Panel>
+
+</div>
+
+</form>
+
+</body>
+</html>
+
+
+
+
+
+
+
+RegistrationForm.aspx.cs
+
+using System;
+using System.Text;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace OnlineEventRegistrationForm
+{
+    public partial class RegistrationForm : Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            ValidationSettings.UnobtrusiveValidationMode =
+                UnobtrusiveValidationMode.None;
+        }
+
+        protected void btnSubmit_Click(object sender, EventArgs e)
+        {
+            if (!Page.IsValid)
+                return;
+
+            if (!chkTerms.Checked)
+            {
+                lblMessage.Text =
+                    "Please accept Terms and Conditions.";
+
+                lblMessage.ForeColor =
+                    System.Drawing.Color.Red;
+
+                pnlResult.Visible = true;
+                return;
+            }
+
+            StringBuilder output = new StringBuilder();
+
+            output.Append("<b>Full Name:</b> " + txtName.Text + "<br/>");
+            output.Append("<b>Email:</b> " + txtEmail.Text + "<br/>");
+            output.Append("<b>Contact No:</b> " + txtContact.Text + "<br/>");
+            output.Append("<b>Department:</b> " +
+                rblDepartment.SelectedItem.Text + "<br/>");
+            output.Append("<b>Event:</b> " +
+                ddlEvent.SelectedItem.Text + "<br/>");
+            output.Append("<b>Gender:</b> " +
+                rblGender.SelectedItem.Text + "<br/>");
+
+            string skills = "";
+
+            foreach (ListItem item in cblSkills.Items)
+            {
+                if (item.Selected)
+                {
+                    if (skills != "")
+                        skills += ", ";
+
+                    skills += item.Text;
+                }
+            }
+
+            output.Append("<b>Skills:</b> " + skills + "<br/>");
+            output.Append("<b>Address:</b> " +
+                txtAddress.Text.Replace("\r\n", "<br/>"));
+
+            lblMessage.Text = "Registration Successful!";
+            lblMessage.ForeColor =
+                System.Drawing.Color.Green;
+
+            lblOutput.Text = output.ToString();
+
+            pnlResult.Visible = true;
+        }
+
+        protected void cvSkills_ServerValidate(
+            object source,
+            ServerValidateEventArgs args)
+        {
+            bool selected = false;
+
+            foreach (ListItem item in cblSkills.Items)
+            {
+                if (item.Selected)
+                {
+                    selected = true;
+                    break;
+                }
+            }
+
+            args.IsValid = selected;
+        }
+
+        protected void cvTerms_ServerValidate(
+            object source,
+            ServerValidateEventArgs args)
+        {
+            args.IsValid = chkTerms.Checked;
+        }
+    }
+}
