@@ -1,50 +1,128 @@
-Practical 9 – Placement Dashboard
-AIM: Create a Placement Dashboard using Data Controls.
+SOURCE CODE – PLACEMENT DASHBOARD
 1. Default.aspx
-Location: Project root – Default.aspx
-<%@ Page Language="C#" AutoEventWireup="true"
-    CodeBehind="Default.aspx.cs"
-    Inherits="PlacementReport.Default" %>
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="P9_PlacementDashboard.Default" %>
 
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <title>Student Details</title>
+    <title>Placement Dashboard</title>
 
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background: #f4f6f9;
-            padding: 30px;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #eef3f8;
+            margin: 0;
+            padding: 20px;
+            color: #333;
         }
 
-        h2 {
-            color: #1e3a8a;
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+        }
+
+        .header {
+            background: #e1f0fb;
+            text-align: center;
+            padding: 22px 10px;
+            border-bottom: 1px solid #b9dcf5;
+        }
+
+        .header h1 {
+            margin: 0;
+            color: #0d47a1;
+            font-size: 26px;
+        }
+
+        .header p {
+            margin: 8px 0 0;
+            color: #555;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .content {
+            padding: 20px 25px;
+        }
+
+        h3 {
+            color: #1565c0;
+            border-bottom: 1px solid #cfe3f3;
+            padding-bottom: 8px;
+        }
+
+        .cards {
+            display: flex;
+            gap: 14px;
+            margin-bottom: 25px;
+        }
+
+        .card {
+            flex: 1;
+            text-align: center;
+            padding: 16px 8px;
+            border: 1px solid #cfe3f3;
+            border-top: 4px solid #0288d1;
+            border-radius: 6px;
+        }
+
+        .card .title {
+            display: block;
+            font-size: 11px;
+            color: #607d8b;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .card .value {
+            display: block;
+            margin-top: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #0d47a1;
+        }
+
+        .unit {
+            font-size: 13px;
+            color: #607d8b;
+            font-weight: normal;
         }
 
         .grid {
             width: 100%;
             border-collapse: collapse;
-            background: white;
+            font-size: 13px;
         }
 
         .grid th {
-            background: #1e3a8a;
-            color: white;
-            padding: 12px;
+            background: #e1f0fb;
+            color: #0d47a1;
             text-align: left;
+            padding: 12px;
         }
 
         .grid td {
-            padding: 10px;
-            border: 1px solid #ddd;
+            padding: 10px 12px;
+            border-bottom: 1px solid #e3edf5;
         }
 
-        .link {
+        .grid tr:nth-child(even) td {
+            background: #f7fafc;
+        }
+
+        .btn {
             display: inline-block;
             margin-top: 20px;
-            color: #1e40af;
+            padding: 11px 22px;
+            background: #0288d1;
+            color: #fff;
             font-weight: bold;
+            text-decoration: none;
+            border-radius: 6px;
         }
     </style>
 </head>
@@ -52,303 +130,383 @@ Location: Project root – Default.aspx
 <body>
     <form id="form1" runat="server">
 
-        <h2>Student Details</h2>
+        <div class="container">
 
-        <asp:GridView ID="GridView1" runat="server"
-            CssClass="grid"
-            AutoGenerateColumns="False"
-            EmptyDataText="No student records found."
-            GridLines="None">
+            <div class="header">
+                <h1>Placement Dashboard</h1>
+                <p>Campus Placement Training &amp; Recruitment Portal</p>
+            </div>
 
-            <Columns>
-                <asp:BoundField DataField="StudentID"
-                    HeaderText="Student ID" />
+            <div class="content">
 
-                <asp:BoundField DataField="StudentName"
-                    HeaderText="Student Name" />
+                <h3>Placement Summary</h3>
 
-                <asp:BoundField DataField="Department"
-                    HeaderText="Department" />
+                <div class="cards">
 
-                <asp:BoundField DataField="Company"
-                    HeaderText="Company" />
+                    <div class="card">
+                        <span class="title">Total Students</span>
+                        <asp:Label ID="lblTotal" runat="server" CssClass="value" />
+                    </div>
 
-                <asp:BoundField DataField="Package"
-                    HeaderText="Package (LPA)"
-                    DataFormatString="{0:N2}" />
+                    <div class="card">
+                        <span class="title">Placed Students</span>
+                        <asp:Label ID="lblPlaced" runat="server" CssClass="value" />
+                    </div>
 
-                <asp:BoundField DataField="Status"
-                    HeaderText="Is Placed" />
-            </Columns>
+                    <div class="card">
+                        <span class="title">Unplaced Students</span>
+                        <asp:Label ID="lblUnplaced" runat="server" CssClass="value" />
+                    </div>
 
-        </asp:GridView>
+                    <div class="card">
+                        <span class="title">Placement Percentage</span>
+                        <asp:Label ID="lblPercentage" runat="server" CssClass="value" />
+                    </div>
 
-        <a href="Companys.aspx" class="link">
-            View Company Details
-        </a>
+                    <div class="card">
+                        <span class="title">Highest Package</span>
+                        <span class="value">
+                            <asp:Label ID="lblHighestPackage" runat="server" />
+                            <span class="unit">LPA</span>
+                        </span>
+                    </div>
+
+                </div>
+
+                <h3>Student Placement Records</h3>
+
+                <asp:GridView ID="gvPlacements" runat="server"
+                    AutoGenerateColumns="True"
+                    GridLines="None"
+                    CssClass="grid"
+                    EmptyDataText="No student records found.">
+                </asp:GridView>
+
+                <asp:HyperLink ID="lnkCompanies" runat="server"
+                    CssClass="btn"
+                    NavigateUrl="~/Companies.aspx"
+                    Text="View Company Summary &rarr;" />
+
+            </div>
+        </div>
 
     </form>
 </body>
 </html>
 
+
 2. Default.aspx.cs
-Location: Default.aspx.cs
 using System;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 
-namespace PlacementReport
+namespace P9_PlacementDashboard
 {
     public partial class Default : System.Web.UI.Page
     {
+        string cs = ConfigurationManager
+            .ConnectionStrings["PlacementDB"]
+            .ConnectionString;
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
-                LoadStudents();
-            }
-        }
-
-        private void LoadStudents()
-        {
-            string cs = ConfigurationManager
-                .ConnectionStrings["PlacementDBConnectionString"]
-                .ConnectionString;
-
-            string query = @"
-                SELECT StudentID, StudentName,
-                Department, Company, Package, Status
-                FROM Students
-                ORDER BY StudentID";
-
-            using (SqlConnection con = new SqlConnection(cs))
-            {
-                using (SqlDataAdapter da =
-                    new SqlDataAdapter(query, con))
-                {
-                    DataTable dt = new DataTable();
-
-                    da.Fill(dt);
-
-                    GridView1.DataSource = dt;
-                    GridView1.DataBind();
-                }
-            }
-        }
-    }
-}
-
-3. Companys.aspx
-Location: Project root – Companys.aspx
-<%@ Page Language="C#" AutoEventWireup="true"
-    CodeBehind="Companys.aspx.cs"
-    Inherits="PlacementReport.Companys" %>
-
-<!DOCTYPE html>
-<html>
-<head runat="server">
-    <title>Company Placement Details</title>
-
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f4f6f9;
-            padding: 30px;
-        }
-
-        h2 {
-            color: #1e3a8a;
-        }
-
-        .grid {
-            width: 100%;
-            border-collapse: collapse;
-            background: white;
-        }
-
-        .grid th {
-            background: #1e3a8a;
-            color: white;
-            padding: 12px;
-            text-align: left;
-        }
-
-        .grid td {
-            padding: 10px;
-            border: 1px solid #ddd;
-        }
-
-        .link {
-            display: inline-block;
-            margin-top: 20px;
-            color: #1e40af;
-            font-weight: bold;
-        }
-
-        hr {
-            margin: 30px 0;
-        }
-    </style>
-</head>
-
-<body>
-    <form id="form1" runat="server">
-
-        <h2>Company Placement Details</h2>
-
-        <asp:GridView ID="GridView1" runat="server"
-            CssClass="grid"
-            AutoGenerateColumns="False"
-            EmptyDataText="No placement records found."
-            GridLines="None">
-
-            <Columns>
-                <asp:BoundField DataField="Company"
-                    HeaderText="Company Name" />
-
-                <asp:BoundField DataField="Package"
-                    HeaderText="Package Offer (LPA)"
-                    DataFormatString="{0:N2}" />
-
-                <asp:BoundField DataField="StudentID"
-                    HeaderText="Student ID" />
-
-                <asp:BoundField DataField="StudentName"
-                    HeaderText="Student Name" />
-
-                <asp:BoundField DataField="Department"
-                    HeaderText="Department" />
-            </Columns>
-
-        </asp:GridView>
-
-        <hr />
-
-        <h2>Company Details Summary</h2>
-
-        <asp:GridView ID="GridView2" runat="server"
-            CssClass="grid"
-            AutoGenerateColumns="False"
-            EmptyDataText="No company summary available."
-            GridLines="None">
-
-            <Columns>
-                <asp:BoundField DataField="Company"
-                    HeaderText="Company Name" />
-
-                <asp:BoundField DataField="Package"
-                    HeaderText="Package Offer (LPA)"
-                    DataFormatString="{0:N2}" />
-
-                <asp:BoundField DataField="TotalStudents"
-                    HeaderText="Total Students Selected" />
-            </Columns>
-
-        </asp:GridView>
-
-        <a href="Default.aspx" class="link">
-            Back to Student Details
-        </a>
-
-    </form>
-</body>
-</html>
-
-4. Companys.aspx.cs
-Location: Companys.aspx.cs
-using System;
-using System.Configuration;
-using System.Data;
-using System.Data.SqlClient;
-
-namespace PlacementReport
-{
-    public partial class Companys : System.Web.UI.Page
-    {
-        protected void Page_Load(object sender, EventArgs e)
-        {
-            if (!IsPostBack)
-            {
+                LoadSummary();
                 LoadPlacements();
             }
         }
 
-        private void LoadPlacements()
+        // Load placement summary
+        private void LoadSummary()
         {
-            string cs = ConfigurationManager
-                .ConnectionStrings["PlacementDBConnectionString"]
-                .ConnectionString;
-
             using (SqlConnection con = new SqlConnection(cs))
             {
-                // Company placement details
-                string query = @"
-                    SELECT Company, Package, StudentID,
-                    StudentName, Department
-                    FROM Students
-                    WHERE Status = 'Placed'
-                    ORDER BY Company";
+                con.Open();
 
-                using (SqlDataAdapter da =
-                    new SqlDataAdapter(query, con))
-                {
-                    DataTable dt = new DataTable();
+                SqlCommand cmd = new SqlCommand(
+                    "SELECT COUNT(*) FROM Students", con);
 
-                    da.Fill(dt);
+                lblTotal.Text = cmd.ExecuteScalar().ToString();
 
-                    GridView1.DataSource = dt;
-                    GridView1.DataBind();
-                }
+                cmd.CommandText =
+                    "SELECT COUNT(*) FROM Students WHERE IsPlaced = 1";
 
-                // Company details summary
-                string summaryQuery = @"
-                    SELECT Company, Package,
-                    COUNT(StudentID) AS TotalStudents
-                    FROM Students
-                    WHERE Status = 'Placed'
-                    GROUP BY Company, Package
-                    ORDER BY Company";
+                lblPlaced.Text = cmd.ExecuteScalar().ToString();
 
-                using (SqlDataAdapter da2 =
-                    new SqlDataAdapter(summaryQuery, con))
-                {
-                    DataTable dt2 = new DataTable();
+                cmd.CommandText =
+                    "SELECT COUNT(*) FROM Students WHERE IsPlaced = 0";
 
-                    da2.Fill(dt2);
+                lblUnplaced.Text = cmd.ExecuteScalar().ToString();
 
-                    GridView2.DataSource = dt2;
-                    GridView2.DataBind();
-                }
+                cmd.CommandText =
+                    "SELECT MAX(PackageLPA) FROM Placements";
+
+                object result = cmd.ExecuteScalar();
+
+                decimal highest = result == DBNull.Value
+                    ? 0
+                    : Convert.ToDecimal(result);
+
+                lblHighestPackage.Text = highest.ToString("N2");
+
+                int total = Convert.ToInt32(lblTotal.Text);
+                int placed = Convert.ToInt32(lblPlaced.Text);
+
+                decimal percentage = total == 0
+                    ? 0
+                    : (decimal)placed * 100 / total;
+
+                lblPercentage.Text = percentage.ToString("N2") + "%";
+            }
+        }
+
+        // Load student placement records
+        private void LoadPlacements()
+        {
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                string query = "SELECT * FROM Students";
+
+                SqlDataAdapter da = new SqlDataAdapter(query, con);
+
+                DataTable dt = new DataTable();
+
+                da.Fill(dt);
+
+                gvPlacements.DataSource = dt;
+                gvPlacements.DataBind();
             }
         }
     }
 }
 
-5. Web.config
-Location: Web.config
 
-Add this connection string inside the existing configuration tag.
-<connectionStrings>
-    <add name="PlacementDBConnectionString"
-         connectionString="Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=PlacementDB;Integrated Security=True"
-         providerName="System.Data.SqlClient" />
-</connectionStrings>
+3. Companies.aspx
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Companies.aspx.cs" Inherits="P9_PlacementDashboard.Companies" %>
 
-6. SQL Server Database
-Open SQL Server Object Explorer and execute:
-CREATE DATABASE PlacementDB;
-GO
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Company Summary</title>
 
-USE PlacementDB;
-GO
+    <style>
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #eef3f8;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
 
-CREATE TABLE Students
-(
-    StudentID INT PRIMARY KEY,
-    StudentName VARCHAR(100),
-    Department VARCHAR(50),
-    Company VARCHAR(100),
-    Package DECIMAL(10,2),
-    Status VARCHAR(20)
-);
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+        }
+
+        .header {
+            background: #e1f0fb;
+            text-align: center;
+            padding: 22px 10px;
+            border-bottom: 1px solid #b9dcf5;
+        }
+
+        .header h1 {
+            margin: 0;
+            color: #0d47a1;
+            font-size: 26px;
+        }
+
+        .header p {
+            margin: 8px 0 0;
+            color: #555;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .content {
+            padding: 20px 25px;
+        }
+
+        h3 {
+            color: #1565c0;
+            border-bottom: 1px solid #cfe3f3;
+            padding-bottom: 8px;
+        }
+
+        .grid {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        .grid th {
+            background: #e1f0fb;
+            color: #0d47a1;
+            text-align: left;
+            padding: 12px;
+        }
+
+        .grid td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #e3edf5;
+        }
+
+        .grid tr:nth-child(even) td {
+            background: #f7fafc;
+        }
+
+        .badge {
+            background: #e3f5e6;
+            color: #2e7d32;
+            font-weight: bold;
+            padding: 3px 10px;
+            border-radius: 12px;
+        }
+
+        .pcard {
+            border: 1px solid #cfe3f3;
+            border-left: 4px solid #0288d1;
+            border-radius: 6px;
+            padding: 14px 16px;
+            margin: 6px;
+            font-size: 13px;
+        }
+
+        .pcard h4 {
+            margin: 0 0 10px;
+            color: #0d47a1;
+            font-size: 16px;
+        }
+
+        .pcard .pkg {
+            color: #2e7d32;
+            font-weight: bold;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 11px 22px;
+            background: #0288d1;
+            color: #fff;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+
+<body>
+    <form id="form1" runat="server">
+
+        <div class="container">
+
+            <div class="header">
+                <h1>Placement Dashboard</h1>
+                <p>Company Recruitment &amp; Placement Summary</p>
+            </div>
+
+            <div class="content">
+
+                <h3>Placement Records</h3>
+
+                <asp:Repeater ID="rptCompanies" runat="server">
+
+                    <HeaderTemplate>
+                        <table class="grid">
+                            <tr>
+                                <th>Placement ID</th>
+                                <th>Student ID</th>
+                                <th>Company</th>
+                                <th>Job Role</th>
+                                <th>Package (LPA)</th>
+                            </tr>
+                    </HeaderTemplate>
+
+                    <ItemTemplate>
+                        <tr>
+                            <td><%# Eval("PlacementId") %></td>
+                            <td><%# Eval("StudentId") %></td>
+                            <td>
+                                <strong><%# Eval("CompanyName") %></strong>
+                            </td>
+                            <td><%# Eval("JobRole") %></td>
+                            <td>
+                                <span class="badge">
+                                    <%# Eval("PackageLPA", "{0:N2}") %> LPA
+                                </span>
+                            </td>
+                        </tr>
+                    </ItemTemplate>
+
+                    <FooterTemplate>
+                        </table>
+                    </FooterTemplate>
+
+                </asp:Repeater>
+
+                <h3>Company Details Using DataList</h3>
+
+                <asp:DataList ID="dlPlacements" runat="server"
+                    RepeatColumns="2"
+                    RepeatDirection="Horizontal"
+                    Width="100%">
+
+                    <ItemStyle Width="50%" VerticalAlign="Top" />
+
+                    <ItemTemplate>
+                        <div class="pcard">
+                            <h4><%# Eval("CompanyName") %></h4>
+
+                            <div>
+                                <b>Role:</b> <%# Eval("JobRole") %>
+                            </div>
+
+                            <div class="pkg">
+                                Package: <%# Eval("PackageLPA", "{0:N2}") %> LPA
+                            </div>
+                        </div>
+                    </ItemTemplate>
+
+                </asp:DataList>
+
+                <a class="btn" href="Default.aspx">
+                    &larr; Back to Dashboard
+                </a>
+
+            </div>
+        </div>
+
+    </form>
+</body>
+</html>
+
+
+4. Companies.aspx.cs
+using System;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
+
+namespace P9_PlacementDashboard
+{
+    public partial class Companies : System.Web.UI.Page
+    {
+        string cs = ConfigurationManager
+            .ConnectionStrings["PlacementDB"]
+            .ConnectionString;
+
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            if (!IsPostBack)
+            {
+                LoadCompanies();
+                LoadPlacements();
+            }
+        }
